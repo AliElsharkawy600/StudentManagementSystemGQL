@@ -9,9 +9,9 @@ import User from "./models/user.js";
 
 dotenv.config();
 
-const PORT = parseInt(process.env.PORT ?? "3000", 10);
-const MONGO_URI = process.env.MONGO_URI ?? "mongodb://localhost:27017/schoolGQL";
-const JWT_SECRET = process.env.JWT_SECRET ?? "change-me";
+const PORT = parseInt(process.env.PORT);
+const MONGO_URI = process.env.MONGO_URI;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const dropLegacyEmailNormalizedIndex = async () => {
   try {
@@ -32,7 +32,6 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ req }) => {
-    const header = req.headers.authorization ?? "";
 
 // console.log(req.headers.bearer);
 
@@ -43,6 +42,8 @@ const token =req.headers.bearer;
     }
 
     try {
+      // console.log(process.env.JWT_SECRET);
+
       const payload = jwt.verify(token, JWT_SECRET);
       const userId = payload.sub ?? payload.id;
       if (!userId) {
