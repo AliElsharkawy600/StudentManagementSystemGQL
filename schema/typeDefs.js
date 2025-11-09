@@ -17,6 +17,16 @@ const typeDefs = gql`
     instructor: String!
   }
 
+  type User {
+    id: ID!
+    email: String!
+  }
+
+  type AuthPayload {
+    token: String!
+    user: User!
+  }
+
   type Query {
     students: [Student!]!
     student(id: ID!): Student
@@ -24,8 +34,18 @@ const typeDefs = gql`
     course(id: ID!): Course
   }
 
+  input StudentInput {
+    name: String!
+    email: String!
+    age: Int!
+    major: String
+  }
+
   type Mutation {
-    addStudent(name: String!, email: String!, age: Int!, major: String): Student!
+    signup(email: String!, password: String!): AuthPayload!
+    login(email: String!, password: String!): AuthPayload!
+
+    addStudent(input: StudentInput!): Student!
     updateStudent(
       id: ID!
       name: String
